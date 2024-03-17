@@ -9,13 +9,13 @@ class AlienBot:
   exit_commands = ("quit", "pause", "exit", "goodbye", "bye", "later", "stop")
   # random starter questions
   random_questions = (
-        "Why are you here? ",
-        "Are there many humans like you? ",
-        "What do you consume for sustenance? ",
-        "Is there intelligent life on this planet? ",
-        "Does Earth have a leader? ",
-        "What planets have you visited? ",
-        "What technology do you have on this planet? "
+        "Why are you here?\n",
+        "Are there many humans like you?\n",
+        "What do you consume for sustenance?\n",
+        "Is there intelligent life on this planet?\n",
+        "Does Earth have a leader?\n",
+        "What planets have you visited?\n",
+        "What technology do you have on this planet?\n"
     )
 
   def __init__(self):
