@@ -6,7 +6,7 @@ class AlienBot:
   # potential negative responses
   negative_responses = ("no", "nope", "nah", "naw", "not a chance", "sorry")
   # keywords for exiting the conversation
-  exit_commands = ("quit", "pause", "exit", "goodbye", "bye", "later")
+  exit_commands = ("quit", "pause", "exit", "goodbye", "bye", "later", "stop")
   # random starter questions
   random_questions = (
         "Why are you here? ",
@@ -30,7 +30,7 @@ class AlienBot:
   def greet(self):
     self.name = input("Hi, what's your name?\n")
 
-    will_help = input(f"Hi {self.name}, I'm AlienBot. I'm not from this planet. Will you help me learn about your planet?\n")
+    will_help = input(f"Hi {self.name}, I'm not from this planet. Will you help me learn about your planet?\n")
 
     if will_help in self.negative_responses:
       print("Ok, have a nice Earth day!\n")
