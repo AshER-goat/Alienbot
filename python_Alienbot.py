@@ -25,26 +25,35 @@ class AlienBot:
                         'cubed_intent': r'.*cube.*(\d+)',
                         'name_intent': r'.*\s*your name.*',
                         'how_you_intent': r'how(?:\s+are)? you.*?',
-                        'mean_intent': [r'\s*retard.*', r'\s*jerk.*', r'\s*asshole.*', r'\s*fuck.*', r'\s*(?:butt|butthead).*', r'\s*(?:ass|asshole).*']
+                        'mean_intent': [
+                        r'\s*(?:dick|dickhead).*', 
+                        r'\s*retard.*', 
+                        r'\s*jerk.*', 
+                        r'\s*asshole.*', 
+                        r'\s*fuck.*', 
+                        r'\s*(?:butt|butthead).*', 
+                        r'\s*(?:ass|asshole).*'], 
+                        'sorry_intent': r'(?:I\'m\s+)?sorry'
                         }
 
   # Define .greet() below:
   def greet(self):
     print("""
-               _        _
-              ( )      ( )
-               --      --
-                --    --
-               _||___ ||_
-             _-          -_
-            | ___      ___ |
-           _|( 0 )    ( 0 )|_
-          [_                _]
-            -     {..}     -
-             -            -
-              -_  ____  _-
-                |{____}|
-                |______|
+               __        __
+              (  )      (  )
+               --        --
+               - -      - -
+                - -    - -
+               _|  |__|  |_
+             _-            -_
+            |  ___      ___  |
+           _| ( 0 )    ( 0 ) |_
+          [_                  _]
+            -     {.  .}     -
+             -              -
+              -_  ______  _ -
+                |{______}|
+                |________|
         """)
     
     self.name = input(f"Hi, what's your name?\n")
@@ -90,6 +99,8 @@ class AlienBot:
             return self.how_you_intent()
           elif intent == 'mean_intent':
             return self.mean_intent(reply)
+          elif intent == 'sorry_intent':
+            return self.sorry_intent()
     return self.no_match_intent()
     # the return self.no_match_intent() should be outside the for loop (instead of being inside an else statement inside the for loop). Otherwise every time you input an intent other than “your planet” it won’t even loop through the rest of the dictionary, instead it will go to no_match in the end.
 
@@ -121,9 +132,13 @@ class AlienBot:
     return f"{random_response} I guess. How are you?\n"
     
   def mean_intent(self, reply):
-    alien_aghast = f"Are you calling me a {reply}?! "
+    escaped_reply = re.escape(reply)
+    alien_aghast = f"Are you calling me a {escaped_reply}?! "
     random_offended_list = ("You're mean.\n", "(cries)\n", "Whatever.\n")
     return alien_aghast + random.choice(random_offended_list)
+    
+  def sorry_intent(self):
+    return "I forgive you. I'm an alien, I understand.\n"
 
   # Define .no_match_intent():
   def no_match_intent(self):
