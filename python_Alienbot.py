@@ -25,7 +25,7 @@ class AlienBot:
                         'cubed_intent': r'.*cube.*(\d+)',
                         'name_intent': r'.*\s*your name.*',
                         'how_you_intent': r'how(?:\s+are)? you.*?',
-                        'mean_intent': [r'\s*jerk.*', r'\s*asshole.*', r'\s*fuck.*']
+                        'mean_intent': [r'\s*retard.*', r'\s*jerk.*', r'\s*asshole.*', r'\s*fuck.*', r'\s*(?:butt|butthead).*', r'\s*(?:ass|asshole).*']
                         }
 
   # Define .greet() below:
@@ -89,7 +89,7 @@ class AlienBot:
           elif intent == 'how_you_intent':
             return self.how_you_intent()
           elif intent == 'mean_intent':
-            return self.mean_intent()
+            return self.mean_intent(reply)
     return self.no_match_intent()
     # the return self.no_match_intent() should be outside the for loop (instead of being inside an else statement inside the for loop). Otherwise every time you input an intent other than “your planet” it won’t even loop through the rest of the dictionary, instead it will go to no_match in the end.
 
@@ -120,9 +120,10 @@ class AlienBot:
     random_response = random.choice(random_response_list)
     return f"{random_response} I guess. How are you?\n"
     
-  def mean_intent(self):
+  def mean_intent(self, reply):
+    alien_aghast = f"Are you calling me a {reply}?! "
     random_offended_list = ("You're mean.\n", "(cries)\n", "Whatever.\n")
-    return random.choice(random_offended_list)
+    return alien_aghast + random.choice(random_offended_list)
 
   # Define .no_match_intent():
   def no_match_intent(self):
