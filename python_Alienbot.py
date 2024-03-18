@@ -7,6 +7,7 @@ class AlienBot:
   negative_responses = ("no", "nope", "nah", "naw", "not a chance", "sorry")
   # keywords for exiting the conversation
   exit_commands = ("quit", "pause", "exit", "goodbye", "bye", "later", "stop")
+  
   # random starter questions
   random_questions = (
         "Why are you here?\n",
@@ -20,15 +21,33 @@ class AlienBot:
 
   def __init__(self):
     self.alienbabble = {'describe_planet_intent': r'.*\s*your planet.*',
-                        'answer_why_intent': r'why\sare.*',
+                        'answer_why_intent': r'why\s*are.*',
                         'cubed_intent': r'.*cube.*(\d+)',
                         'name_intent': r'.*\s*your name.*',
-                        'how_you_intent': r'how(?:\s+are)? you.*?'
-                            }
+                        'how_you_intent': r'how(?:\s+are)? you.*?',
+                        'mean_intent': [r'\s*jerk.*', r'\s*asshole.*', r'\s*fuck.*']
+                        }
 
   # Define .greet() below:
   def greet(self):
-    self.name = input("Hi, what's your name?\n")
+    print("""
+               _        _
+              ( )      ( )
+               --      --
+                --    --
+               _||___ ||_
+             _-          -_
+            | ___      ___ |
+           _|( 0 )    ( 0 )|_
+          [_                _]
+            -     {..}     -
+             -            -
+              -_  ____  _-
+                |{____}|
+                |______|
+        """)
+    
+    self.name = input(f"Hi, what's your name?\n")
 
     will_help = input(f"Hi {self.name}, I'm not from this planet. Will you help me learn about your planet?\n")
 
@@ -50,27 +69,29 @@ class AlienBot:
     reply = input(random.choice(self.random_questions)).lower()
     while not self.make_exit(reply):
       reply = input(self.match_reply(reply))
-
     
   # Define .match_reply() below:
   def match_reply(self, reply):
-    for key,value in self.alienbabble.items():
+    for key, value in self.alienbabble.items():
       intent = key
-      regex_pattern = value
-      found_match = re.match(regex_pattern,reply)
-      if found_match and intent == 'describe_planet_intent':
-        return self.describe_planet_intent()
-      elif found_match and intent == 'answer_why_intent':
-        return self.answer_why_intent()
-      elif found_match and intent == 'cubed_intent':
-        return self.cubed_intent(found_match.groups()[0])
-      elif found_match and intent == 'name_intent':
-        return self.name_intent()
-      elif found_match and intent == 'how_you_intent':
-        return self.how_you_intent()
+      patterns = value if isinstance(value, list) else [value]  # Check if value is a list
+      for pattern in patterns:
+        found_match = re.match(pattern, reply)
+        if found_match:
+          if intent == 'describe_planet_intent':
+            return self.describe_planet_intent()
+          elif intent == 'answer_why_intent':
+            return self.answer_why_intent()
+          elif intent == 'cubed_intent':
+            return self.cubed_intent(found_match.groups()[0])
+          elif intent == 'name_intent':
+            return self.name_intent()
+          elif intent == 'how_you_intent':
+            return self.how_you_intent()
+          elif intent == 'mean_intent':
+            return self.mean_intent()
+    return self.no_match_intent()
     # the return self.no_match_intent() should be outside the for loop (instead of being inside an else statement inside the for loop). Otherwise every time you input an intent other than “your planet” it won’t even loop through the rest of the dictionary, instead it will go to no_match in the end.
-    else:
-      return self.no_match_intent()
 
 
   # Define .describe_planet_intent():
@@ -98,10 +119,14 @@ class AlienBot:
     random_response_list = ("Not so good.", "Great!", "Ok.")
     random_response = random.choice(random_response_list)
     return f"{random_response} I guess. How are you?\n"
+    
+  def mean_intent(self):
+    random_offended_list = ("You're mean.\n", "(cries)\n", "Whatever.\n")
+    return random.choice(random_offended_list)
 
   # Define .no_match_intent():
   def no_match_intent(self):
-    responses = ("Please tell me more","Tell me more!","Why do you say that?\n","I see. Can you elaborate?\n","Interesting. Can you tell me more?\n","I see. How do you think?\n","why?\n","How do you think I feel when you say that?\n")
+    responses = ("Please tell me more\n","Tell me more!\n","Why do you say that?\n","I see. Can you elaborate?\n","Interesting. Can you tell me more?\n","I see.\n","why?\n","How do you think I feel when you say that?\n")
     return random.choice(responses)
 
 # Create an instance of AlienBot below:
