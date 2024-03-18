@@ -1,6 +1,8 @@
 # # importing regex and random libraries
+import sys
 import re
 import random
+import time
 
 class AlienBot:
   # potential negative responses
@@ -18,8 +20,10 @@ class AlienBot:
         "What planets have you visited?\n",
         "What technology do you have on this planet?\n"
     )
-
+    
   def __init__(self):
+    self.mean_intent_counts = 0  # Initialize mean_intent_counts as an attribute of the class
+
     self.alienbabble = {'describe_planet_intent': r'.*\s*your planet.*',
                         'answer_why_intent': r'why\s*are.*',
                         'cubed_intent': r'.*cube.*(\d+)',
@@ -58,7 +62,7 @@ class AlienBot:
     
     self.name = input(f"Hi, what's your name?\n")
 
-    will_help = input(f"Hi {self.name}, I'm not from this planet. Will you help me learn about your planet?\n")
+    will_help = input(f"Hi {self.name}, I'm not from this planet. I'm using a highly advanced universal translator to communicate with you. Do you want to chat?\n")
 
     if will_help in self.negative_responses:
       print("Ok, have a nice Earth day!\n")
@@ -68,10 +72,9 @@ class AlienBot:
 
   # Define .make_exit() here:
   def make_exit(self, reply):
-    for exitwords in self.exit_commands:
-      if reply == exitwords:
-        print("ok, have a nice Earth day!\n")
-        return True
+    if reply in self.exit_commands or reply == "insulted":
+      print("Ok, have a nice Earth day!\n" if reply in self.exit_commands else "Bye")
+      return True
 
   # Define .chat() next:
   def chat(self):
@@ -81,6 +84,7 @@ class AlienBot:
     
   # Define .match_reply() below:
   def match_reply(self, reply):
+    mean_intent_counts = 0  # Initialize mean_intent_counts outside the loop
     for key, value in self.alienbabble.items():
       intent = key
       patterns = value if isinstance(value, list) else [value]  # Check if value is a list
@@ -98,6 +102,7 @@ class AlienBot:
           elif intent == 'how_you_intent':
             return self.how_you_intent()
           elif intent == 'mean_intent':
+            self.mean_intent_counts += 1
             return self.mean_intent(reply)
           elif intent == 'sorry_intent':
             return self.sorry_intent()
@@ -132,10 +137,16 @@ class AlienBot:
     return f"{random_response} I guess. How are you?\n"
     
   def mean_intent(self, reply):
-    escaped_reply = re.escape(reply)
-    alien_aghast = f"Are you calling me a {escaped_reply}?! "
-    random_offended_list = ("You're mean.\n", "(cries)\n", "Whatever.\n")
-    return alien_aghast + random.choice(random_offended_list)
+      escaped_reply = re.escape(reply)
+      alien_aghast = f"Are you calling me a {escaped_reply}?! "
+        
+      if self.mean_intent_counts <= 2:  # Accessing mean_intent_counts as an attribute of the class
+        random_offended_list = ("You're mean.\n", "(cries)\n", "Whatever.\n")
+        return alien_aghast + random.choice(random_offended_list)
+      else:
+        print("I'm not talking to you anymore.\n")
+        self.countdown(4)
+        #return random_offended
     
   def sorry_intent(self):
     return "I forgive you. I'm an alien, I understand.\n"
@@ -144,6 +155,14 @@ class AlienBot:
   def no_match_intent(self):
     responses = ("Please tell me more\n","Tell me more!\n","Why do you say that?\n","I see. Can you elaborate?\n","Interesting. Can you tell me more?\n","I see.\n","why?\n","How do you think I feel when you say that?\n")
     return random.choice(responses)
+    
+  def countdown(self, seconds):
+    for i in range(seconds, 0, -1):
+      print(i)
+      time.sleep(1) #wait 1 second
+
+    # After the countdown finishes, exit the program
+    sys.exit()
 
 # Create an instance of AlienBot below:
 Chatbot = AlienBot()
